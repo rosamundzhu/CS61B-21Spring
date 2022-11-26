@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Jade Zhu
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -112,7 +112,60 @@ public class Model extends Observable {
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
+        // changed local variable to true. --> changed = true
+
+        board.setViewingPerspective(side);
+        int m = size() - 1; // m is the most upper row
+        // start from row 3 down
+        // can up if the space above it is empty,
+        // or it can move up one if the space above it has the same value as itself
+        for (int col = 0; col < size(); col += 1) {
+            for (int row = m; row >= 0; row -= 1) {
+                Tile t1 = board.tile(col, row);
+                //分两个大类，t1是null和t1不是null
+                if (t1 != null) {
+                    for (int i = row - 1; i >= 0; i -= 1) {  //t1和t1下面每一行从上到下进行比较
+                        Tile t2 = board.tile(col, i);
+                        if (t2 != null) { //如果t2不是null，那么就
+                            if (t1.value() == t2.value()) {
+                                board.move(col, row, t2);
+                                score += t1.value() * 2;
+                                changed = true;
+                                break; // 如果t2相等，先移动该行，再跳到code123行的for，t1的行数row-1，进行下一行的比较（更新t1)
+                            } else {
+                                break; // 如果t2不为空，但不相等，已经无需将row行t1和下面的行对比，直接跳到code123行的for，t1的行数row-1，进行下一行的比较（更新t1)
+                            }
+                        } // 如果t2是null，就继续在t1这个row这个第127行的for循环下进行i-1，t1和行数减1的t2比较（更新t2)
+                    }
+                } else { //如果t1是null，先忽略第一层，把t1 row-1那一行(t2)当成最上面一行，最后统一挪到最上面
+                    for (int i = row - 1; i >= 0; i -= 1) {
+                        Tile t2 = board.tile(col, i);
+                        if (t2 != null) {
+                            if (i != 0) { //如果t2不是最底下一行，考虑下面的能否和上面的合并
+                                for (int i2 = i - 1; i2 >= 0; i2 -= 1) {
+                                    Tile t3 = board.tile(col, i2);
+                                    if (t3 != null) {
+                                        if (t2.value() == t3.value()) {
+                                            board.move(col, i, t3); //能加总的都move到i行
+                                            score += t2.value() * 2;
+                                            changed = true;
+                                            break;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }
+                            } //如果t2已经是最下面一行(i==0)，且非空，直接挪到row行
+                            Tile w = board.tile(col, i); //更新i行的数字，为w (就是更新t2那一行，但是t2还是保存着之前的数字）
+                            board.move(col, row, w); //只要w非null，不管下面还有没有行合并，都需要挪到row所在的行
+                            changed = true;
+                            break;
+                        } // 如果t2也是null, then开始考虑i = 3
+                    }
+                }
+            }
+        }
+        board.setViewingPerspective(side.NORTH);
 
         checkGameOver();
         if (changed) {
@@ -138,6 +191,14 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        // 逐个检查每个tile是否是null
+        for (int col = 0; col < b.size(); col += 1) {
+            for (int row = 0; row < b.size(); row += 1) {
+                if (b.tile(col, row) == null) { // use "while" instead of "if" is ok
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -148,6 +209,16 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        // 逐个检查每一个tile的value是否是MAX_PIECE
+        for (int col = 0; col < b.size(); col += 1) {
+            for (int row = 0; row < b.size(); row += 1) {
+                if (b.tile(col, row) != null) { //如果是null，则调用不了value
+                    if (b.tile(col, row).value() == MAX_PIECE) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -158,7 +229,21 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        // TODO: Fill in this function
+        if (emptySpaceExists(b)) {
+            return true;
+        }
+        // you only need to compare the tile with the right one and with the one down,
+        // as well as the one in the rightest and bottom corner with the one above it and the one on its left
+        for (int col = 0; col < b.size() - 1; col += 1) {
+            for (int row = 0; row < b.size() - 1; row += 1) {
+                if (b.tile(col, row).value() == b.tile(col+1, row).value() | b.tile(col, row).value() == b.tile(col, row+1).value()) {
+                    return true;
+                } else if (b.tile(b.size()-1, b.size()-1).value() == b.tile(b.size()-2, b.size()-1).value() | b.tile(b.size()-1, b.size()-1).value() == b.tile(b.size()-1, b.size()-2).value()){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 

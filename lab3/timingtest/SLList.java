@@ -42,7 +42,7 @@ public class SLList<Item> {
 
 	/** Adds x to the end of the list. */
 	public void addLast(Item x) {
-		size = size + 1;
+		size = (int) Math.round(size * 1.5);
 
 		IntNode p = sentinel;
 
@@ -72,10 +72,10 @@ public class SLList<Item> {
 		return size;
 	}
 
-	public static void main(String[] args) {
-		/* Creates a list of one integer, namely 10 */
-		SLList L = new SLList();
-		L.addLast(20);
-		System.out.println(L.size());
-	}
+//	public static void main(String[] args) {
+//		/* Creates a list of one integer, namely 10 */
+//		SLList L = new SLList();
+//		L.addLast(20);
+//		System.out.println(L.size());
+//	}
 }
