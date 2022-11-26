@@ -5,7 +5,7 @@ package deque;
 // Double-ended queues are sequence containers with dynamic sizes that
 //      can be expanded or contracted on both ends (either its front or its back).
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
     private T[] ts;
     private int size;
 
@@ -144,5 +144,23 @@ public class ArrayDeque<T> {
 
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    public void printDeque() {
+        if (size == 0) {
+            return;
+        }
+        if (firposition < lastposition) {
+            for (int i = firposition + 1; i < lastposition; i ++ ) {
+                System.out.print(ts[i]);
+            }
+        } else {
+            for (int i = firposition + 1; i < ts.length; i ++ ) {
+                System.out.print(ts[i]);
+            }
+            for (int i = lastposition - 1; i >= 0; i -- ) {
+                System.out.print(ts[i]);
+            }
+        }
     }
 }

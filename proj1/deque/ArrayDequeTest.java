@@ -60,6 +60,7 @@ public class ArrayDequeTest {
         lld1.removeLast();
         lld1.removeLast();
         lld1.removeLast();
+        lld1.printDeque();
         assertEquals(6, lld1.size());
     }
 
