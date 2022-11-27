@@ -186,13 +186,47 @@ public class ArrayDequeTest {
         aque.addFirst(5);
         aque.addFirst(6);
         aque.addFirst(6);
+        aque.removeLast();
+        aque.removeLast();
+        aque.removeLast();
+        aque.removeFirst();
 
         ArrayDeque<Integer> o = new ArrayDeque<>();
         o.addFirst(6);
         o.addFirst(5);
         o.addFirst(6);
         o.addFirst(6);
+        o.removeFirst();
+        o.removeFirst();
+        o.removeLast();
+        o.removeLast();
 
         assertEquals("Should have different value", true, aque.equals(o));
+    }
+
+    @Test
+    public void testEqual3() {
+        LinkedListDeque lld1 = new LinkedListDeque<>();
+        lld1.addFirst(5);
+        lld1.addFirst("long");
+        lld1.addFirst(5);
+
+        LinkedListDeque lld2 = new LinkedListDeque<>();
+        lld2.addFirst(5);
+        lld2.addFirst("long");
+        lld2.addFirst(5);
+
+
+        ArrayDeque o2 = new ArrayDeque<>();
+        o2.addFirst(5);
+        o2.addFirst(lld1);
+        o2.addFirst("short");
+
+        ArrayDeque o3 = new ArrayDeque<>();
+        o3.addFirst(5);
+        o3.addFirst(lld2);
+        o3.addFirst("short");
+
+        assertEquals("not equal", true, o2.equals(o3));
     }
 }

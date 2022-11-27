@@ -145,20 +145,19 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof LinkedListDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        LinkedListDeque oll = (LinkedListDeque) o;
+        Deque oll = (Deque) o;
         if (oll.size() != this.size()) {
             return false;
         }
-        Iterator<Object> otherIterator = oll.iterator();
+//        Iterator<Object> otherIterator = oll.iterator();
+        int i = 0;
         for (final Object a1 : this) {
             // guaranteed to work, because both lists have the same size:
-            final Object a2 = otherIterator.next();
-//            if (!Objects.equals(a1, a2)) {
-//                return false;
-//            }
+            Object a2 = oll.get(i);
+            i += 1;
             if (a1 == a2) {
                 continue;
             }
@@ -168,8 +167,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             if (a1.getClass() != a2.getClass()) {
                 return false;
             }
-            if (!a1.equals(a2))
+            if (!a1.equals(a2)) {
                 return false;
+            }
+//                final Object a2 = otherIterator.next();
+//            if (!Objects.equals(a1, a2)) {
+//                return false;
+//            }
         }
         return true;
     }

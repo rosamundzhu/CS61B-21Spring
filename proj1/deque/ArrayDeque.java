@@ -174,18 +174,19 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null) {
             return false;
         }
-        if (!(o instanceof ArrayDeque)) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        ArrayDeque oll = (ArrayDeque) o;
+        Deque oll = (Deque) o;
         if (oll.size() != this.size()) {
             return false;
         }
-        Iterator<Object> otherIterator = oll.iterator();
+//        Iterator<Object> otherIterator = oll.iterator();
+        int i = 0;
         for (final Object a1 : this) {
             // guaranteed to work, because both lists have the same size:
-            final Object a2 = otherIterator.next();
-
+            Object a2 = oll.get(i);
+            i += 1;
             if (a1 == a2) {
                 continue;
             }
@@ -195,8 +196,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             if (a1.getClass() != a2.getClass()) {
                 return false;
             }
-            if (!a1.equals(a2))
+            if (!a1.equals(a2)) {
                 return false;
+            }
 
 //            if (!Objects.equals(a1, a2)) {
 //                return false;
