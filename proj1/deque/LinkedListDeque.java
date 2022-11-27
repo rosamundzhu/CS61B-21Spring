@@ -1,5 +1,7 @@
 package deque;
 
+import org.antlr.v4.runtime.misc.ObjectEqualityComparator;
+
 import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
@@ -62,7 +64,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public T removeFirst() {
         if (size() > 0) {
             TNode removeNode = sentinel.next;
-            sentinel.next = sentinel.next.next;
+            sentinel.next = removeNode.next;
+            removeNode.next.pre = sentinel;
             size -= 1;
             return removeNode.ts;
         } else {
@@ -73,8 +76,8 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public T removeLast() {
         if (size() > 0) {
             TNode removeNode = sentinel.pre;
-            sentinel.pre = sentinel.pre.pre;
-            sentinel.pre.next = sentinel;
+            sentinel.pre = removeNode.pre;
+            removeNode.pre.next = sentinel;
             size -= 1;
             return removeNode.ts;
         } else {
@@ -85,7 +88,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     public T get(int index) {
         if (index < size) {
             TNode p = sentinel;
-            for (int i = 0; i <= index; i ++) {
+            for (int i = 0; i <= index; i++) {
                 p = p.next;
             }
             return p.ts;
@@ -137,12 +140,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
+    @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
-        if (o == null) {
-            return true;
+        if (o == null || this == null) {
+            return false;
         }
         if (o.getClass() != LinkedListDeque.class) {
             return false;
@@ -152,10 +156,33 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return false;
         }
         for (int i = 0; i < this.size(); i++) {
-            if (oll.get(i) != this.get(i)) {
+            Object a1 = oll.get(i);
+            Object a2 = this.get(i);
+            if (a1 == a2) {
+                return true;
+            }
+            if (a2 == null) {
                 return false;
             }
+            if (a1.getClass() != a2.getClass()) {
+                return false;
+            }
+            boolean de = deepEquals(a1, a2);
+            return de;
         }
         return true;
+    }
+
+    private boolean deepEquals(Object a1, Object a2) {
+        boolean deq;
+        if (a1 instanceof ArrayDeque || a1 instanceof LinkedListDeque) {
+            deq = a1.equals(a2);
+        } else {
+            if (a1 == a2) {
+                return true;
+            }
+            return false;
+        }
+        return deq;
     }
 }

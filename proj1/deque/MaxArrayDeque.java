@@ -16,7 +16,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
             return null;
         }
         T maxItem = this.get(0);
-        for (int i = 1; i < size; i ++ ) {
+        for (int i = 1; i < size; i++) {
             if (ourComparator.compare(this.get(i), maxItem) > 0) {
                 maxItem = this.get(i);
             }
@@ -32,7 +32,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
             return null;
         }
         T maxItem = this.get(0);
-        for (int i = 1; i < size; i ++ ) {
+        for (int i = 1; i < size; i++) {
             if (c.compare(this.get(i), maxItem) > 0) {
                 maxItem = get(i);
             }
@@ -42,20 +42,13 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
     // returns the maximum element in the deque as governed by the parameter Comparator c.
     // If the MaxArrayDeque is empty, simply return null.
 
-    public static Comparator<Integer> getIntComparator() {
-        return new IntComparator();
-    }
-
-    private static class IntComparator implements Comparator<Integer> {
+    public static class IntComparator implements Comparator<Integer> {
         public int compare(Integer a, Integer b) {
             return a - b;
         }
     }
 
-    public static Comparator<String> getCharComparator() {
-        return new StringComparator();
-    }
-    private static class StringComparator implements Comparator<String> {
+    public static class StringComparator implements Comparator<String> {
         public int compare(String a, String b) {
             return a.compareTo(b);
         }

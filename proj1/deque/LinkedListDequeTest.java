@@ -1,9 +1,5 @@
 package deque;
-
 import org.junit.Test;
-
-import java.util.Iterator;
-
 import static org.junit.Assert.*;
 
 
@@ -17,12 +13,10 @@ public class LinkedListDequeTest {
      * && is the "and" operation. */
     public void addIsEmptySizeTest() {
 
-        // System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+        LinkedListDeque<String> lld1 = new LinkedListDeque();
 
-        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
-
-		assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
-		lld1.addFirst("front");
+		assertTrue("should be empty", lld1.isEmpty());
+        lld1.addFirst("front");
 
 		// The && operator is the same as "and" in Python.
 		// It's a binary operator that returns true if both arguments true, and false otherwise.
@@ -43,19 +37,19 @@ public class LinkedListDequeTest {
     @Test
     /** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
     public void addRemoveTest() {
-
-        // System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
-		// should be empty
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque();
 		assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
 
 		lld1.addFirst(10);
-		// should not be empty
 		assertFalse("lld1 should contain 1 item", lld1.isEmpty());
 
 		lld1.removeFirst();
-		// should be empty
 		assertTrue("lld1 should be empty after removal", lld1.isEmpty());
+
+        lld1.addLast(10);
+        lld1.removeLast();
+        assertTrue("lld1 should be empty after removal", lld1.isEmpty());
+
     }
 
     @Test
@@ -72,11 +66,7 @@ public class LinkedListDequeTest {
         lld1.removeFirst();
 
         int size = lld1.size();
-        String errorMsg = "  Bad size returned when removing from empty deque.\n";
-        errorMsg += "  student size() returned " + size + "\n";
-        errorMsg += "  actual size() returned 0\n";
-
-        assertEquals(errorMsg, 0, size);
+        assertEquals("should be equal to zero", 0, size);
     }
 
     @Test
@@ -164,18 +154,31 @@ public class LinkedListDequeTest {
         lld1.addFirst("long");
         lld1.addFirst(5);
 
+        LinkedListDeque lld2 = new LinkedListDeque<>();
+        lld2.addFirst(5);
+        lld2.addFirst("long");
+        lld2.addFirst(5);
+
         LinkedListDeque o = new LinkedListDeque<>();
         o.addFirst(5);
         o.addFirst("long");
-        o.addFirst(5);
+        o.addFirst(6);
+        o.removeLast();
+        o.removeLast();
+        o.removeFirst();
 
-        assertEquals("equal", true, lld1.equals(o));
+        assertEquals("equal", false, lld1.equals(o));
 
         LinkedListDeque o2 = new LinkedListDeque<>();
         o2.addFirst(5);
-        o2.addFirst("long");
+        o2.addFirst(lld1);
         o2.addFirst("short");
 
-        assertEquals("not equal", false, lld1.equals(o2));
+        LinkedListDeque o3 = new LinkedListDeque<>();
+        o3.addFirst(5);
+        o3.addFirst(lld2);
+        o3.addFirst("short");
+
+        assertEquals("not equal", true, o2.equals(o3));
     }
 }

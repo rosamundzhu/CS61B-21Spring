@@ -9,7 +9,7 @@ public class MaxArrayDequeTest {
     /* Test IntComparator of MaxArrayDeque */
     public void testIntComparator() {
 
-        Comparator<Integer> c = MaxArrayDeque.getIntComparator();
+        Comparator<Integer> c = new MaxArrayDeque.IntComparator();
         MaxArrayDeque<Integer> a = new MaxArrayDeque<>(c);
         assertNull("Max should be null.", a.max());
 
@@ -26,7 +26,7 @@ public class MaxArrayDequeTest {
 
     @Test
     public void testStringComparator() {
-        Comparator<String> c = MaxArrayDeque.getCharComparator();
+        Comparator<String> c = new MaxArrayDeque.StringComparator();
         MaxArrayDeque<String> a = new MaxArrayDeque<>(c);
         assertNull("Max should be null.", a.max());
 
@@ -38,8 +38,8 @@ public class MaxArrayDequeTest {
 
     @Test
     public void testAssignedComparator() {
-        Comparator<Integer> x = MaxArrayDeque.getIntComparator();
-        Comparator<String> y = MaxArrayDeque.getCharComparator();
+        Comparator<Integer> x = new MaxArrayDeque.IntComparator();
+        Comparator<String> y = new MaxArrayDeque.StringComparator();
         MaxArrayDeque<String> a = new MaxArrayDeque(x);
         assertNull("Max should be null.", a.max(y));
 
@@ -53,7 +53,7 @@ public class MaxArrayDequeTest {
 
     @Test
     public void testBasic1() {
-        Comparator<Integer> x = MaxArrayDeque.getIntComparator();
+        Comparator<Integer> x = new MaxArrayDeque.IntComparator();
         MaxArrayDeque<Integer> MaxArrayDeque = new MaxArrayDeque(x);
         MaxArrayDeque.addFirst(0);
         assertEquals("It should be 0.", 0, MaxArrayDeque.removeLast(), 0);
@@ -69,7 +69,7 @@ public class MaxArrayDequeTest {
 
     @Test
     public void testBasic2() {
-        Comparator<Integer> x = MaxArrayDeque.getIntComparator();
+        Comparator<Integer> x = new MaxArrayDeque.IntComparator();
         MaxArrayDeque<Integer> MaxArrayDeque = new MaxArrayDeque(x);
         MaxArrayDeque.addLast(0);
         assertEquals("It should be 0.", 0, MaxArrayDeque.get(0),0);
