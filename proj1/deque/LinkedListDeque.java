@@ -55,14 +55,6 @@ public class LinkedListDeque<T> implements Deque<T> {
         return size;
     }
 
-    public boolean isEmpty() {
-        if (sentinel.next == null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public T removeFirst() {
         if (size() > 0) {
             TNode removeNode = sentinel.next;
