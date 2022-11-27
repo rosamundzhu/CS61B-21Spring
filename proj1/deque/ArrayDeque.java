@@ -1,7 +1,6 @@
 package deque;
 
 import java.util.Iterator;
-
 /** double-ended queue.
  * Double-ended queues are sequence containers with dynamic sizes that
  * can be expanded or contracted on both ends (either its front or its back).
@@ -172,19 +171,21 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (o == this) {
             return true;
         }
-        if (o == null || this == null) {
+        if (o == null) {
             return false;
         }
-        if (!(o instanceof Deque)) {
+        if (!(o instanceof ArrayDeque)) {
             return false;
         }
-        Deque oll = (Deque) o;
+        ArrayDeque oll = (ArrayDeque) o;
         if (oll.size() != this.size()) {
             return false;
         }
-        for (int i = 0; i < this.size(); i++) {
-            Object a2 = oll.get(i);
-            Object a1 = this.get(i);
+        Iterator<Object> otherIterator = oll.iterator();
+        for (final Object a1 : this) {
+            // guaranteed to work, because both lists have the same size:
+            final Object a2 = otherIterator.next();
+
             if (a1 == a2) {
                 continue;
             }
@@ -194,21 +195,40 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             if (a1.getClass() != a2.getClass()) {
                 return false;
             }
-            return deepEquals(a1, a2);
+            if (!a1.equals(a2))
+                return false;
+
+//            if (!Objects.equals(a1, a2)) {
+//                return false;
+//            }
+
+//        for (int i = 0; i < this.size(); i++) {
+//            Object a2 = oll.get(i);
+//            Object a1 = this.get(i);
+//            if (a1 == a2) {
+//                continue;
+//            }
+//            if (a2 == null) {
+//                return false;
+//            }
+//            if (a1.getClass() != a2.getClass()) {
+//                return false;
+//            }
+//            return deepEquals(a1, a2);
         }
         return true;
     }
 
-    private boolean deepEquals(Object a1, Object a2) {
-        boolean deq;
-        if (a1 instanceof Deque) {
-            deq = a1.equals(a2);
-        } else {
-            if (a1 == a2) {
-                return true;
-            }
-            return false;
-        }
-        return deq;
-    }
+//    private boolean deepEquals(Object a1, Object a2) {
+//        boolean deq;
+//        if (a1 instanceof Deque) {
+//            deq = a1.equals(a2);
+//        } else {
+//            if (a1 == a2) {
+//                return true;
+//            }
+//            return false;
+//        }
+//        return deq;
+//    }
 }
