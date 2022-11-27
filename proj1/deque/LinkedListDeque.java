@@ -1,7 +1,4 @@
 package deque;
-
-import org.antlr.v4.runtime.misc.ObjectEqualityComparator;
-
 import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
@@ -148,18 +145,18 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         if (o == null || this == null) {
             return false;
         }
-        if (o.getClass() != LinkedListDeque.class) {
+        if (!(o instanceof Deque)) {
             return false;
         }
-        LinkedListDeque oll = (LinkedListDeque) o;
+        Deque oll = (Deque) o;
         if (oll.size() != this.size()) {
             return false;
         }
         for (int i = 0; i < this.size(); i++) {
-            Object a1 = oll.get(i);
-            Object a2 = this.get(i);
+            Object a2 = oll.get(i);
+            Object a1 = this.get(i);
             if (a1 == a2) {
-                return true;
+                continue;
             }
             if (a2 == null) {
                 return false;
@@ -175,7 +172,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     private boolean deepEquals(Object a1, Object a2) {
         boolean deq;
-        if (a1 instanceof ArrayDeque || a1 instanceof LinkedListDeque) {
+        if (a1 instanceof Deque) {
             deq = a1.equals(a2);
         } else {
             if (a1 == a2) {

@@ -5,11 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-
-
 public class ArrayDequeTest {
 
     @Test
@@ -18,7 +13,7 @@ public class ArrayDequeTest {
      *
      * && is the "and" operation. */
     public void addIsEmptySizeTest() {
-        ArrayDeque<String> lld1 = new ArrayDeque<String>();
+        ArrayDeque<String> lld1 = new ArrayDeque();
 
         assertTrue("A newly initialized LLDeque should be empty", lld1.isEmpty());
         lld1.addFirst("front");
