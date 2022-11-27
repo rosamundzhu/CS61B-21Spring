@@ -1,8 +1,5 @@
 package deque;
 
-import afu.org.checkerframework.checker.igj.qual.I;
-import org.checkerframework.framework.qual.LiteralKind;
-
 import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
@@ -11,10 +8,10 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private int size;
 
     private class TNode {
-        public TNode pre;
-        public T ts;
-        public TNode next;
-        public TNode(TNode m, T i, TNode n) {
+        private TNode pre;
+        private T ts;
+        private TNode next;
+        TNode(TNode m, T i, TNode n) {
             pre = m;
             ts = i;
             next = n;
@@ -145,7 +142,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return true;
         }
         if (o == null) {
-            return false;
+            return true;
         }
         if (o.getClass() != LinkedListDeque.class) {
             return false;

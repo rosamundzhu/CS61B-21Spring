@@ -162,9 +162,6 @@ public class ArrayDequeTest {
     public void testIte() {
         ArrayDeque<Integer> aque = new ArrayDeque();
         aque.addFirst(5);
-        aque.addFirst(5);
-        aque.addFirst(5);
-
         for (int i: aque) {
             assertEquals("Should have 5", 5, i, 0.0);
         }
@@ -172,18 +169,35 @@ public class ArrayDequeTest {
 
     @Test
     public void testEqual() {
-        ArrayDeque<Integer> aque = new ArrayDeque();
+        ArrayDeque<Integer> aque = new ArrayDeque<>();
         aque.addFirst(6);
         aque.addFirst(5);
         aque.addFirst(6);
         aque.addFirst(6);
 
-        ArrayDeque o = new ArrayDeque();
+        ArrayDeque<Integer> o = new ArrayDeque<>();
         o.addFirst(4);
         o.addFirst(5);
         o.addFirst(6);
         o.addFirst(5);
 
         assertEquals("Should have different value", false, aque.equals(o));
+    }
+
+    @Test
+    public void testEqual2() {
+        ArrayDeque<Integer> aque = new ArrayDeque<>();
+        aque.addFirst(6);
+        aque.addFirst(5);
+        aque.addFirst(6);
+        aque.addFirst(6);
+
+        ArrayDeque<Integer> o = new ArrayDeque<>();
+        o.addFirst(6);
+        o.addFirst(5);
+        o.addFirst(6);
+        o.addFirst(6);
+
+        assertEquals("Should have different value", true, aque.equals(o));
     }
 }

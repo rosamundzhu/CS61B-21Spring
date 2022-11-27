@@ -110,7 +110,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 System.arraycopy(ts, m, a, stposition, size);
             } else {
                 System.arraycopy(ts, m, a, stposition, ts.length - m);
-                System.arraycopy(ts, 0, a,stposition + ts.length - m - 1, n + 1);
+                System.arraycopy(ts, 0, a, stposition + ts.length - m - 1, n + 1);
             }
             ts = a;
             firposition = stposition;
@@ -150,14 +150,20 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             if (size == 0) {
                 return false;
             }
-            if (firposition < lastposition) {
-                if (pos0 < lastposition) {
-                    return true;
+            if (pos0 == lastposition) {
+                return true;
+            }
+            if (size > 1) {
+                if (firposition < lastposition) {
+                    if (pos0 < lastposition) {
+                        return true;
+                    }
+                } else {
+                    if (pos0 + 1 < ts.length) {
+                        return true;
+                    }
                 }
-            } else {
-                if (pos0 + 1 < ts.length) {
-                    return true;
-                }
+                return false;
             }
             return false;
         }
