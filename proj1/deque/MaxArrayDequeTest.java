@@ -51,4 +51,36 @@ public class MaxArrayDequeTest {
         assertEquals("Max should be 'NoName'.", "NoName", a.max(y));
     }
 
+    @Test
+    public void testBasic1() {
+        Comparator<Integer> x = MaxArrayDeque.getIntComparator();
+        MaxArrayDeque<Integer> MaxArrayDeque = new MaxArrayDeque(x);
+        MaxArrayDeque.addFirst(0);
+        assertEquals("It should be 0.", 0, MaxArrayDeque.removeLast(), 0);
+        MaxArrayDeque.isEmpty();
+        MaxArrayDeque.isEmpty();
+        MaxArrayDeque.isEmpty();
+        MaxArrayDeque.isEmpty();
+        MaxArrayDeque.isEmpty();
+        MaxArrayDeque.isEmpty();
+        MaxArrayDeque.addFirst(8);
+        assertEquals("It should be 8.", 8, MaxArrayDeque.removeLast(),0);
+    }
+
+    @Test
+    public void testBasic2() {
+        Comparator<Integer> x = MaxArrayDeque.getIntComparator();
+        MaxArrayDeque<Integer> MaxArrayDeque = new MaxArrayDeque(x);
+        MaxArrayDeque.addLast(0);
+        assertEquals("It should be 0.", 0, MaxArrayDeque.get(0),0);
+        assertEquals("It should be 0.", 0, MaxArrayDeque.removeFirst(),0);
+        MaxArrayDeque.addLast(3);
+        assertEquals("It should be 3.", 3, MaxArrayDeque.removeLast(),0);
+        MaxArrayDeque.addLast(5);
+        assertEquals("It should be 5.", 5, MaxArrayDeque.removeLast(),0);
+        MaxArrayDeque.addLast(7);
+        assertEquals("It should be 7.", 7, MaxArrayDeque.removeLast(),0);
+        MaxArrayDeque.addLast(9);
+        assertEquals("It should be 9.", 9, MaxArrayDeque.get(0),0);
+    }
 }

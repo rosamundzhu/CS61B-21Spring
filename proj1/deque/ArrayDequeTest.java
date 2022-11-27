@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -155,5 +156,34 @@ public class ArrayDequeTest {
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
+    }
+
+    @Test
+    public void testIte() {
+        ArrayDeque<Integer> aque = new ArrayDeque();
+        aque.addFirst(5);
+        aque.addFirst(5);
+        aque.addFirst(5);
+
+        for (int i: aque) {
+            assertEquals("Should have 5", 5, i, 0.0);
+        }
+    }
+
+    @Test
+    public void testEqual() {
+        ArrayDeque<Integer> aque = new ArrayDeque();
+        aque.addFirst(6);
+        aque.addFirst(5);
+        aque.addFirst(6);
+        aque.addFirst(6);
+
+        ArrayDeque o = new ArrayDeque();
+        o.addFirst(4);
+        o.addFirst(5);
+        o.addFirst(6);
+        o.addFirst(5);
+
+        assertEquals("Should have different value", false, aque.equals(o));
     }
 }

@@ -1,6 +1,9 @@
 package deque;
 
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 
@@ -131,7 +134,7 @@ public class LinkedListDequeTest {
 
     @Test
     public void twoGetEqual() {
-        LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
+        LinkedListDeque<String> lld1 = new LinkedListDeque();
 
         lld1.addFirst("front");
         lld1.addLast("middle");
@@ -141,5 +144,38 @@ public class LinkedListDequeTest {
         assertEquals(lld1.getRecursive(1), lld1.get(1));
         assertEquals(lld1.getRecursive(2), lld1.get(2));
 
+    }
+
+    @Test
+    public void testIterator() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque();
+        lld1.addFirst(5);
+        lld1.addFirst(5);
+        lld1.addFirst(5);
+
+        for (int i: lld1) {
+            assertEquals("Should have 5", 5, i, 0.0);
+        }
+    }
+    @Test
+    public void testEqual() {
+        LinkedListDeque lld1 = new LinkedListDeque<>();
+        lld1.addFirst(5);
+        lld1.addFirst("long");
+        lld1.addFirst(5);
+
+        LinkedListDeque o = new LinkedListDeque<>();
+        o.addFirst(5);
+        o.addFirst("long");
+        o.addFirst(5);
+
+        assertEquals("equal", true, lld1.equals(o));
+
+        LinkedListDeque o2 = new LinkedListDeque<>();
+        o2.addFirst(5);
+        o2.addFirst("long");
+        o2.addFirst("short");
+
+        assertEquals("not equal", false, lld1.equals(o2));
     }
 }

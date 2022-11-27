@@ -1,6 +1,11 @@
 package deque;
 
-public class LinkedListDeque<T> implements Deque<T> {
+import afu.org.checkerframework.checker.igj.qual.I;
+import org.checkerframework.framework.qual.LiteralKind;
+
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
 
     private TNode sentinel;
     private int size;
@@ -17,7 +22,9 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     public LinkedListDeque() {
-        sentinel = new TNode(null,null, null);
+        sentinel = new TNode(null, null, null);
+        sentinel.pre = sentinel;
+        sentinel.next = sentinel;
         size = 0;
     }
 //
@@ -31,12 +38,12 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     public void addFirst(T item) {
         TNode newTNode = new TNode(sentinel, item, sentinel.next);
-        sentinel.next = newTNode;
         if (size != 0) {
             sentinel.next.pre = newTNode;
         } else {
             sentinel.pre = newTNode;
         }
+        sentinel.next = newTNode;
         size += 1;
     }
 
@@ -79,7 +86,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     public T get(int index) {
-        if (index < size()) {
+        if (index < size) {
             TNode p = sentinel;
             for (int i = 0; i <= index; i ++) {
                 p = p.next;
@@ -91,9 +98,9 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
 
     public void printDeque() {
-        if (size() > 0) {
+        if (size > 0) {
             TNode p = sentinel;
-            for (int i = 0; i < size; i ++) {
+            for (int i = 0; i < size; i++) {
                 p = p.next;
                 System.out.print(p.ts + " ");
             }
@@ -114,8 +121,44 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
 
-    // public Iterator<T> iterator()
+    public Iterator<T> iterator() {
+        return new LinkedListDeque.LLDequeIterator();
+    }
 
-    // public boolean equals(Object o)
+    private class LLDequeIterator implements Iterator<T> {
+        TNode pos = sentinel;
+        public boolean hasNext() {
+            if (size == 0) {
+                return false;
+            }
+            return pos.next != sentinel;
+        }
+        public T next() {
+            T x = pos.next.ts;
+            pos = pos.next;
+            return x;
+        }
+    }
 
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() != LinkedListDeque.class) {
+            return false;
+        }
+        LinkedListDeque oll = (LinkedListDeque) o;
+        if (oll.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++) {
+            if (oll.get(i) != this.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

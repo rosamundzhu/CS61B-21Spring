@@ -1,11 +1,13 @@
 package deque;
 
+import java.util.Iterator;
 
-// double-ended queue.
-// Double-ended queues are sequence containers with dynamic sizes that
-//      can be expanded or contracted on both ends (either its front or its back).
+/** double-ended queue.
+ * Double-ended queues are sequence containers with dynamic sizes that
+ * can be expanded or contracted on both ends (either its front or its back).
+ */
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] ts;
     private int size;
 
@@ -44,8 +46,10 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size > 0) {
             T x = ts[firposition];
             ts[firposition] = null;
-            firposition = (firposition + 1) % ts.length;
             size -= 1;
+            if (size != 0) {
+                firposition = (firposition + 1) % ts.length;
+            }
             useCheck();
             return x;
         }
@@ -54,7 +58,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     public void addLast(T item) {
         if (size == ts.length) {
-            resize( ts.length * 2);
+            resize(ts.length * 2);
         }
         if (ts[lastposition] != null) {
             lastposition = (lastposition + 1) % ts.length;
@@ -67,8 +71,10 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size() > 0) {
             T x = ts[lastposition];
             ts[lastposition] = null;
-            lastposition = (lastposition - 1 + ts.length) % ts.length;
             size -= 1;
+            if (size != 0) {
+                lastposition = (lastposition - 1 + ts.length) % ts.length;
+            }
             useCheck();
             return x;
         } else {
@@ -98,7 +104,7 @@ public class ArrayDeque<T> implements Deque<T> {
             int m = firposition;
             int n = lastposition;
             int capacity = Math.round(ts.length / 2);
-            stposition = Math.round(capacity/2);
+            stposition = Math.round(capacity / 2);
             T[] a = (T[]) new Object[capacity];
             if (m < n) {
                 System.arraycopy(ts, m, a, stposition, size);
@@ -121,16 +127,64 @@ public class ArrayDeque<T> implements Deque<T> {
             return;
         }
         if (firposition < lastposition) {
-            for (int i = firposition + 1; i < lastposition; i ++ ) {
+            for (int i = firposition; i <= lastposition; i++) {
                 System.out.print(ts[i]);
             }
         } else {
-            for (int i = firposition + 1; i < ts.length; i ++ ) {
+            for (int i = firposition; i < ts.length; i++) {
                 System.out.print(ts[i]);
             }
-            for (int i = lastposition - 1; i >= 0; i -- ) {
+            for (int i = lastposition; i >= 0; i--) {
                 System.out.print(ts[i]);
             }
         }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int pos0 = firposition;
+        public boolean hasNext() {
+            if (size == 0) {
+                return false;
+            }
+            if (firposition < lastposition) {
+                if (pos0 < lastposition) {
+                    return true;
+                }
+            } else {
+                if (pos0 + 1 < ts.length) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public T next() {
+            T x = ts[pos0];
+            pos0 = (pos0 + 1) % ts.length;
+            return x;
+        }
+    }
+
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o == null) {
+            return false;
+        } else if (o.getClass() != ArrayDeque.class) {
+            return false;
+        }
+        ArrayDeque<T> oArray = (ArrayDeque) o;
+        if (oArray.size() != this.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++) {
+            if (oArray.get(i) != this.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
