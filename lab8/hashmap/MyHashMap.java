@@ -1,6 +1,7 @@
 package hashmap;
 
-import java.util.Collection;
+import java.util.*;
+
 
 /**
  *  A hash table-backed Map implementation. Provides amortized constant time
@@ -26,13 +27,26 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     }
 
     /* Instance Variables */
+    private static final int RESIZING_FACTOR = 2;
     private Collection<Node>[] buckets;
-    // You should probably define some more!
+    // each Collection of Node represent a single bucket
+    // e.g. LinkedList<Node> or ArrayList<Node>
+    private int collectionsize;
+    private double loadFactor;
+    private int numBucket;
+    private int size = 0;
+    public ArrayList<Integer> list;
+
+
 
     /** Constructors */
-    public MyHashMap() { }
+    public MyHashMap() {
+        this(16, 0.75);
+    }
 
-    public MyHashMap(int initialSize) { }
+    public MyHashMap(int initialSize) {
+        this(initialSize, 0.75);
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialSize.
@@ -41,12 +55,26 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param initialSize initial size of backing array
      * @param maxLoad maximum load factor
      */
-    public MyHashMap(int initialSize, double maxLoad) { }
+    public MyHashMap(int initialSize, double maxLoad) {
+        if (initialSize < 1 || maxLoad <= 0.0) {
+            throw new IllegalArgumentException ();
+        }
+        buckets = new Collection[initialSize];
+        for (int i = 0; i < initialSize; i++) {
+            buckets[i] = this.createBucket();
+        }
+        collectionsize = initialSize;
+        loadFactor = maxLoad;
+    }
+
 
     /**
      * Returns a new node to be placed in a hash table bucket
      */
     private Node createNode(K key, V value) {
+        if (key != null) {
+            return new Node(key, value);
+        }
         return null;
     }
 
@@ -69,7 +97,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * OWN BUCKET DATA STRUCTURES WITH THE NEW OPERATOR!
      */
     protected Collection<Node> createBucket() {
-        return null;
+        return new ArrayList<>();
     }
 
     /**
@@ -85,7 +113,168 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         return null;
     }
 
-    // TODO: Implement the methods of the Map61B Interface below
-    // Your code won't compile until you do so!
+    /** Removes all of the mappings from this map. */
+    @Override
+    public void clear() {
+        for (int i = 0; i < collectionsize; i++) {
+            buckets[i] = createBucket();
+        }
+        size = 0;
+    }
 
+    /** Returns true if this map contains a mapping for the specified key. */
+    @Override
+    public boolean containsKey(K key) {
+        numBucket = Math.floorMod(key.hashCode(), collectionsize);
+        if (buckets[numBucket] != null) {
+            for (Node s: buckets[numBucket]) {
+                if (s.key.equals(key)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the value to which the specified key is mapped, or null if this
+     * map contains no mapping for the key.
+     */
+    @Override
+    public V get(K key) {
+        if (key == null) {
+            return null;
+        }
+        numBucket = Math.floorMod(key.hashCode(), collectionsize);
+        if (buckets[numBucket] != null) {
+            for (Node s: buckets[numBucket]) {
+                if (s.key.equals(key)) {
+                    return s.value;
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Returns the number of key-value mappings in this map. */
+    @Override
+    public int size() {
+        return size;
+    }
+
+    /**
+     * Associates the specified value with the specified key in this map.
+     * If the map previously contained a mapping for the key,
+     * the old value is replaced.
+     */
+    @Override
+    public void put(K key, V value) {
+        if (key == null) {
+            return;
+        }
+        numBucket = Math.floorMod(key.hashCode(), collectionsize);
+        if (containsKey(key)) {
+            for (Node s: buckets[numBucket]) {
+                if (s.key.equals(key)) {
+                    s.value = value;
+                    break;
+                }
+            }
+        } else {
+            Node m = new Node(key, value);
+            buckets[numBucket].add(m);
+            size += 1;
+            if ((double) size / collectionsize > loadFactor) {
+                resize();
+            }
+        }
+    }
+
+//    public ArrayList<Integer> getSizeEachBucket() {
+//        int num = 0;
+//        for (int i = 0; i < collectionsize; i++) {
+//            for (Node node : buckets[i]) {
+//                num += 1;
+//            }
+//            list.add(i, num);
+//        }
+//        return list;
+//    }
+
+    public void resize() {
+        int newsize = RESIZING_FACTOR * collectionsize;
+        MyHashMap<K, V> newhashmap = new MyHashMap<>(newsize, loadFactor);
+        Collection<Node>[] newbuckets = newhashmap.buckets;
+        for (int i = 0; i < collectionsize; i++) {
+            if (buckets[i] == null){
+                continue;
+            }
+            for (Node item: buckets[i]) {
+                newhashmap.put(item.key, item.value);
+            }
+        }
+        buckets = newbuckets;
+        collectionsize = newsize;
+    }
+
+    /** Returns a Set view of the keys contained in this map. */
+    @Override
+    public Set<K> keySet() {
+        Set<K> set = new HashSet<>();
+        for (int i = 0; i < collectionsize; i++) {
+            if (buckets[i] == null){
+                continue;
+            }
+            for (Node item: buckets[i]) {
+                set.add(item.key);
+            }
+        }
+        return set;
+    }
+
+    @Override
+    public Iterator<K> iterator() {
+        Set<K> set = keySet();
+        return set.iterator();
+    }
+
+
+    @Override
+    public V remove(K key) {
+        if (key == null) {
+            return null;
+        }
+        if (!containsKey(key)) {
+            return null;
+        }
+        numBucket = Math.floorMod(key.hashCode(), collectionsize);
+        for (Node s: buckets[numBucket]) {
+            if (s.key.equals(key)) {
+                V v = s.value;
+                buckets[numBucket].remove(s);
+                size -= 1;
+                return v;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public V remove(K key, V value) {
+        if (key == null) {
+            return null;
+        }
+        if (!containsKey(key)) {
+            return null;
+        }
+        numBucket = Math.floorMod(key.hashCode(), collectionsize);
+        for (Node s: buckets[numBucket]) {
+            if (s.key.equals(key) && s.value.equals(value)) {
+                buckets[numBucket].remove(s);
+                size -= 1;
+                return value;
+            }
+        }
+        return null;
+    }
 }
