@@ -181,7 +181,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
                 }
             }
         } else {
-            Node m = new Node(key, value);
+            Node m = createNode(key, value);
             buckets[numBucket].add(m);
             size += 1;
             if ((double) size / collectionsize > loadFactor) {
@@ -190,18 +190,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
     }
 
-//    public ArrayList<Integer> getSizeEachBucket() {
-//        int num = 0;
-//        for (int i = 0; i < collectionsize; i++) {
-//            for (Node node : buckets[i]) {
-//                num += 1;
-//            }
-//            list.add(i, num);
-//        }
-//        return list;
-//    }
-
-    public void resize() {
+    private void resize() { // it should be made private
         int newsize = RESIZING_FACTOR * collectionsize;
         MyHashMap<K, V> newhashmap = new MyHashMap<>(newsize, loadFactor);
         Collection<Node>[] newbuckets = newhashmap.buckets;
