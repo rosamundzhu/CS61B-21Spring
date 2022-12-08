@@ -35,9 +35,6 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private double loadFactor;
     private int numBucket;
     private int size = 0;
-    public ArrayList<Integer> list;
-
-
 
     /** Constructors */
     public MyHashMap() {
