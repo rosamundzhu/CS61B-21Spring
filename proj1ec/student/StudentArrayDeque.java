@@ -2,11 +2,11 @@ package student;
 
 public class StudentArrayDeque<T> {
     private T[] a = (T[]) (new Object[8]);
-    private int b = 8;
-    private int c = 0;
+    private int b = 8; // length
+    private int c = 0; // size
     private int d = 4;
-    private int e = 4;
-    private int f = 5;
+    private int e = 4; // first position
+    private int f = 5; // last position
     private boolean g = false;
     private boolean h = false;
     private T z = null;
@@ -18,7 +18,7 @@ public class StudentArrayDeque<T> {
         try {
             z = var1;
             this.a();
-            if (this.e >= 0) {
+            if (this.e >= 0) { // first position > 0
                 this.a[this.e] = var1;
                 --this.e;
             } else {
@@ -27,7 +27,7 @@ public class StudentArrayDeque<T> {
                 this.h = true;
             }
 
-            ++this.c;
+            ++this.c; // size += 1
         } catch (RuntimeException rte) {
             return;
         }
@@ -37,6 +37,7 @@ public class StudentArrayDeque<T> {
         try {
             z = var1;
             this.a();
+            ++this.c;
             if (this.f < this.a.length) {
                 this.a[this.f] = var1;
                 ++this.f;
@@ -45,8 +46,6 @@ public class StudentArrayDeque<T> {
                 this.f = 1;
                 this.g = true;
             }
-
-            ++this.c;
         } catch (RuntimeException rte) {
             return;
         }
@@ -63,31 +62,35 @@ public class StudentArrayDeque<T> {
                 if (this.e != this.d) {
                     if (this.e == this.a.length - 1) {
                         var1 = this.a[0];
+                        this.a[0] = null;
                         this.e = 0;
                         this.h = false;
                         return (T) var1;
                     } else {
                         var1 = this.a[this.e + 1];
+                        this.a[this.e + 1] = null;
                         ++this.e;
                         return (T) var1;
                     }
                 } else if (this.h) {
                     var1 = this.a[this.e + 1];
+                    a[this.e + 1] = null;
                     ++this.e;
                     if (this.e == this.a.length) {
                         this.h = false;
                         this.e = 0;
                     }
-
                     return (T) var1;
                 } else if (this.e == this.a.length - 1) {
                     var1 = this.a[0];
+                    this.a[0] = null;
                     this.e = 0;
                     this.d = 0;
                     this.g = false;
                     return (T) var1;
                 } else {
                     var1 = this.a[this.d + 1];
+                    this.a[this.d + 1] = null;
                     this.e = this.d + 1;
                     ++this.d;
                     this.h = false;
@@ -110,11 +113,13 @@ public class StudentArrayDeque<T> {
                 if (this.f != 1 + this.d) {
                     if (this.f == 0) {
                         var1 = this.a[this.a.length - 1];
+                        this.a[this.a.length - 1] = null;
                         this.f = this.a.length;
                         this.g = false;
                         return (T) var1;
                     } else {
                         var1 = this.a[this.f - 1];
+                        this.a[this.f - 1] = null;
                         --this.f;
                         if (this.f == 0) {
                             this.g = false;
@@ -125,6 +130,7 @@ public class StudentArrayDeque<T> {
                     }
                 } else if (this.g) {
                     var1 = this.a[this.f - 1];
+                    this.a[this.f - 1] = null;
                     --this.f;
                     if (this.f <= 0) {
                         this.g = false;
@@ -139,6 +145,7 @@ public class StudentArrayDeque<T> {
                     return (T) var1;
                 } else {
                     var1 = this.a[this.d];
+                    this.a[this.d] = null;
                     this.f = this.d--;
                     this.g = false;
                     return (T) var1;
